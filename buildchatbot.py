@@ -12,6 +12,8 @@ from xml.etree import ElementTree
 
 JENKINS_URL = 'http://127.0.0.1:8080'
 SKYPE_CHAT = '#user/$abc123'
+NOTIFY_JOB_NAME = 'your_job_name'
+
 UPDATE_INTERVAL = 15  # seconds
 MESSAGE_PREFIX = '[Jenkins] '
 
@@ -75,6 +77,8 @@ class BuildNotifier:
     self.chat = skype.Chat(SKYPE_CHAT)
 
   def notify(self, build, event):
+    if build.name != NOTIFY_JOB_NAME:
+      return
     message = event +': '+ build.name +' - '+ JENKINS_URL +'/job/'+ build.name +'/'+ build.number +'/'
     print message
     self.chat.SendMessage(MESSAGE_PREFIX + message)
@@ -84,4 +88,3 @@ if __name__ == '__main__':
     BuildMonitor(BuildNotifier()).loop()
   except KeyboardInterrupt:
     pass
-
