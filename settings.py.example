@@ -1,0 +1,4 @@
+JENKINS_URL = 'http://localhost:8080'
+SKYPE_CHAT = '#user/$abc123'
+UPDATE_INTERVAL = 15  # seconds
+MESSAGE_PREFIX = '[Jenkins] '

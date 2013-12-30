@@ -9,11 +9,7 @@ from time import sleep
 from urllib import urlopen
 from Skype4Py import Skype
 from xml.etree import ElementTree
-
-JENKINS_URL = 'http://127.0.0.1:8080'
-SKYPE_CHAT = '#user/$abc123'
-UPDATE_INTERVAL = 15  # seconds
-MESSAGE_PREFIX = '[Jenkins] '
+from settings import *
 
 class Build:
   def __init__(self, attrs):
