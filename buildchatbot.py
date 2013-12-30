@@ -16,6 +16,9 @@ class Build:
     self.name = attrs['name']
     self.number = attrs['lastBuildLabel']
     self.status = attrs['lastBuildStatus']
+    self.activity = attrs['activity']
+  def __str__(self):
+    return "{} - {} - {} - {}".format(self.name, self.number, self.status, self.activity)
 
 class BuildMonitor:
 
@@ -40,6 +43,8 @@ class BuildMonitor:
           self.handle_new_build(build, None)
         elif build.number != self.builds[name].number:
           self.handle_new_build(build, self.builds[name].status)
+        if self.builds[name].activity != 'Building' and build.activity == 'Building':
+          self.listener.notify(build, 'Building')
     self.builds = builds
 
   def handle_new_build(self, build, old_status):
@@ -50,6 +55,8 @@ class BuildMonitor:
       self.listener.notify(build, '(sun) Fixed')
     elif build.status == 'Failure':
       self.listener.notify(build, '(rain) Failed')
+    elif transition == ('Success', 'Success'):
+      self.listener.notify(build, '(sun) Success')
 
   def fetch_builds(self):
     builds = {}
