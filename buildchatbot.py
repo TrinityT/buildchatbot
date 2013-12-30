@@ -7,7 +7,7 @@
 import platform
 from time import sleep
 from urllib import urlopen
-from Skype4Py import Skype
+from Skype4Py import Skype, errors
 from xml.etree import ElementTree
 from settings import *
 
@@ -75,7 +75,14 @@ class BuildNotifier:
     else:
       skype = Skype(Transport='x11')
     skype.Attach()
-    self.chat = skype.Chat(SKYPE_CHAT)
+    self.chat = None
+    for chat in skype.RecentChats:
+      if chat.FriendlyName == SKYPE_CHAT:
+        self.chat = skype.Chat(chat.Name)
+        break
+    if(self.chat == None):
+      raise errors.SkypeError(105, "Cannot find chat. Please, use listrecentchats.py for correct chat name")
+      
 
   def notify(self, build, event):
     message = event +': '+ build.name +' - '+ JENKINS_URL +'/job/'+ build.name +'/'+ build.number +'/'
