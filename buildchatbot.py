@@ -44,6 +44,8 @@ class BuildMonitor:
         elif build.number != self.builds[name].number:
           self.handle_new_build(build, self.builds[name].status)
         if self.builds[name].activity != 'Building' and build.activity == 'Building':
+          #increase build number, because Jenkins give only lastBuild 
+          build.number = str(int(build.number) + 1)
           self.listener.notify(build, 'Building')
     self.builds = builds
 
