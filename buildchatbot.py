@@ -39,6 +39,8 @@ class BuildMonitor:
     if self.builds is not None:
       for build in builds.values():
         name = build.name
+        if name in EXCLUDE:
+          continue
         if not self.builds.has_key(name):
           self.handle_new_build(build, None)
         elif build.number != self.builds[name].number:
