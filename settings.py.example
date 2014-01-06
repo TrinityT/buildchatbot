@@ -2,3 +2,8 @@ JENKINS_URL = 'http://localhost:8080'
 SKYPE_CHAT = 'jenkins_chat_name'
 UPDATE_INTERVAL = 15  # seconds
 MESSAGE_PREFIX = '[Jenkins] '
+
+EXCLUDE = [
+    'job1-name',
+    'job2-name',
+]
