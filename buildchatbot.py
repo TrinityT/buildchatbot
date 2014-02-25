@@ -7,21 +7,18 @@
 import platform
 from time import sleep
 from urllib import urlopen
-from Skype4Py import Skype
+from Skype4Py import Skype, errors
 from xml.etree import ElementTree
-
-JENKINS_URL = 'http://127.0.0.1:8080'
-SKYPE_CHAT = '#user/$abc123'
-NOTIFY_JOB_NAME = 'your_job_name'
-
-UPDATE_INTERVAL = 15  # seconds
-MESSAGE_PREFIX = '[Jenkins] '
+from settings import *
 
 class Build:
   def __init__(self, attrs):
     self.name = attrs['name']
     self.number = attrs['lastBuildLabel']
     self.status = attrs['lastBuildStatus']
+    self.activity = attrs['activity']
+  def __str__(self):
+    return "{} - {} - {} - {}".format(self.name, self.number, self.status, self.activity)
 
 class BuildMonitor:
 
@@ -42,10 +39,16 @@ class BuildMonitor:
     if self.builds is not None:
       for build in builds.values():
         name = build.name
+        if name in EXCLUDE:
+          continue
         if not self.builds.has_key(name):
           self.handle_new_build(build, None)
         elif build.number != self.builds[name].number:
           self.handle_new_build(build, self.builds[name].status)
+        if self.builds[name].activity != 'Building' and build.activity == 'Building':
+          #increase build number, because Jenkins give only lastBuild
+          build.number = str(int(build.number) + 1)
+          self.listener.notify(build, 'Building')
     self.builds = builds
 
   def handle_new_build(self, build, old_status):
@@ -56,6 +59,8 @@ class BuildMonitor:
       self.listener.notify(build, '(sun) Fixed')
     elif build.status == 'Failure':
       self.listener.notify(build, '(rain) Failed')
+    elif transition == ('Success', 'Success'):
+      self.listener.notify(build, '(sun) Success')
 
   def fetch_builds(self):
     builds = {}
@@ -74,7 +79,14 @@ class BuildNotifier:
     else:
       skype = Skype(Transport='x11')
     skype.Attach()
-    self.chat = skype.Chat(SKYPE_CHAT)
+    self.chat = None
+    for chat in skype.RecentChats:
+      if chat.FriendlyName == SKYPE_CHAT:
+        self.chat = skype.Chat(chat.Name)
+        break
+    if(self.chat == None):
+      raise errors.SkypeError(105, "Cannot find chat. Please, use listrecentchats.py for correct chat name")
+
 
   def notify(self, build, event):
     if build.name != NOTIFY_JOB_NAME:
