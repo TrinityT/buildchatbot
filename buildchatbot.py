@@ -60,8 +60,8 @@ class BuildMonitor:
       self.listener.notify(build, '(sun) Fixed')
     elif build.status == 'Failure':
       self.listener.notify(build, '(rain) Failed')
-    elif transition == ('Success', 'Success'):
-      self.listener.notify(build, '(sun) Success')
+    #elif transition == ('Success', 'Success'):
+    #  self.listener.notify(build, '(sun) Success')
 
   def fetch_builds(self):
     builds = {}
