@@ -1,3 +1,4 @@
+# coding:utf-8
 JENKINS_URL = 'http://localhost:8080'
 SKYPE_CHAT = 'jenkins_chat_name'
 UPDATE_INTERVAL = 15  # seconds
