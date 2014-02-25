@@ -1,4 +1,4 @@
-# coding:utf-8
+# coding: utf-8
 import platform
 from Skype4Py import Skype
 

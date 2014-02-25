@@ -1,10 +1,10 @@
+# coding: utf-8
 #
 # buildchatbot - Monitors Jenkins builds and sends notifications to a Skype chat
 #
 # Copyright (c) 2012 Mirko Nasato - All rights reserved.
 # Licensed under the BSD 2-clause license; see LICENSE.txt
 #
-# coding:utf-8
 import platform
 from time import sleep
 from urllib import urlopen

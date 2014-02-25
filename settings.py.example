@@ -1,6 +1,7 @@
-# coding:utf-8
+# coding: utf-8
+# NOTICE: SKYPE_CHATに日本語名をつけている場合は文字列に明示的にuを指定しないとチャット名チェックに引っかかっている。
 JENKINS_URL = 'http://localhost:8080'
-SKYPE_CHAT = 'jenkins_chat_name'
+SKYPE_CHAT = u"チャット名"
 UPDATE_INTERVAL = 15  # seconds
 MESSAGE_PREFIX = '[Jenkins] '
 
