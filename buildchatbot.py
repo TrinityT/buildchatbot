@@ -89,8 +89,6 @@ class BuildNotifier:
 
 
   def notify(self, build, event):
-    if build.name != NOTIFY_JOB_NAME:
-      return
     message = event +': '+ build.name +' - '+ JENKINS_URL +'/job/'+ build.name +'/'+ build.number +'/'
     print message
     self.chat.SendMessage(MESSAGE_PREFIX + message)
